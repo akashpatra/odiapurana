@@ -1,11 +1,13 @@
 package in.co.trapps.odiapurana;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,11 +21,15 @@ public class MainActivity extends AppCompatActivity {
     private static final int LAXMI_PURANA_COUNT = 3;
     // For Logging
     private final LoggerEnable CLASS_NAME = LoggerEnable.MainAct;
+
+    @BindView(R.id.toolbar)
+    public Toolbar toolbar;
+
+    @BindView(R.id.tabL_laxmi_purana)
+    public TabLayout tabLayoutLaxmiPurana;
+
     @BindView(R.id.vp_laxmi_purana)
     public ViewPager vpLaxmiPurana;
-
-//    @BindView(R.id.pts_laxmi_purana)
-//    public PagerTabStrip ptsLaxmiPurana;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +42,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
         vpLaxmiPurana.setAdapter(new LaxmiPuranaAdapter(getSupportFragmentManager()));
-//        ptsLaxmiPurana.setTabIndicatorColor(ContextCompat.getColor(this, android.R.color.black));
+        tabLayoutLaxmiPurana.setupWithViewPager(vpLaxmiPurana);
     }
 
     private class LaxmiPuranaAdapter extends FragmentPagerAdapter {
