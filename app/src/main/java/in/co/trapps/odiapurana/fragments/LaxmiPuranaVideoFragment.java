@@ -6,6 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import butterknife.ButterKnife;
 import in.co.trapps.odiapurana.R;
@@ -20,6 +25,10 @@ public class LaxmiPuranaVideoFragment extends Fragment {
 
     // For Logging
     private final LoggerEnable CLASS_NAME = LoggerEnable.LaxmiPuranaVideoFragment;
+
+    private YouTubePlayerSupportFragment youTubeFragment;
+
+    private YouTubePlayer yPlayer;
 
     public LaxmiPuranaVideoFragment() {
         // Required empty public constructor
@@ -39,6 +48,9 @@ public class LaxmiPuranaVideoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_laxmi_purana_video, container, false);
         ButterKnife.bind(this, view);
+
+        youTubeFragment = (YouTubePlayerSupportFragment) getChildFragmentManager().findFragmentById(R.id.youtube_fragment);
+
         return view;
     }
 
@@ -46,6 +58,42 @@ public class LaxmiPuranaVideoFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Logger.logD(Config.TAG, CLASS_NAME, " >> onViewCreated");
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        Logger.logD(Config.TAG, CLASS_NAME, " >> setUserVisibleHint >> Flag: " + isVisibleToUser);
+
+        if (isVisibleToUser && isResumed()) {
+            loadYoutubeLink();
+        }
+    }
+
+    private void loadYoutubeLink() {
+        youTubeFragment.initialize(Config.YOUTUBE_API_KEY, new YouTubePlayer.OnInitializedListener() {
+            @Override
+            public void onInitializationSuccess(YouTubePlayer.Provider provider,
+                                                YouTubePlayer youTubePlayer, boolean b) {
+                if (!b) {
+                    yPlayer = youTubePlayer;
+//                    yPlayer.setFullscreen(true);
+                    yPlayer.loadVideo("Pzz3vNNFM5I");
+                    yPlayer.play();
+                }
+            }
+
+            @Override
+            public void onInitializationFailure(YouTubePlayer.Provider provider,
+                                                YouTubeInitializationResult errorReason) {
+                if (errorReason.isUserRecoverableError()) {
+                    errorReason.getErrorDialog(getActivity(), 1).show();
+                } else {
+                    String errorMessage = String.format(getString(R.string.error_player), errorReason.toString());
+                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -76,6 +124,10 @@ public class LaxmiPuranaVideoFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         Logger.logD(Config.TAG, CLASS_NAME, " >> onDestroyView");
+
+        if (null != youTubeFragment) {
+            getChildFragmentManager().beginTransaction().remove(youTubeFragment).commitAllowingStateLoss();
+        }
     }
 
     @Override
