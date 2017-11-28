@@ -19,12 +19,15 @@ import in.co.trapps.odiapurana.logger.Logger;
 import in.co.trapps.odiapurana.logger.LoggerEnable;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment which plays youtube video of Laxmi Purana.
  */
 public class LaxmiPuranaVideoFragment extends Fragment {
 
     // For Logging
     private final LoggerEnable CLASS_NAME = LoggerEnable.LaxmiPuranaVideoFragment;
+
+    // Constant
+    private final String PURANA_VIDEO_LINK = "Pzz3vNNFM5I";
 
     private YouTubePlayerSupportFragment youTubeFragment;
 
@@ -49,7 +52,8 @@ public class LaxmiPuranaVideoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_laxmi_purana_video, container, false);
         ButterKnife.bind(this, view);
 
-        youTubeFragment = (YouTubePlayerSupportFragment) getChildFragmentManager().findFragmentById(R.id.youtube_fragment);
+        youTubeFragment = (YouTubePlayerSupportFragment) getChildFragmentManager()
+                .findFragmentById(R.id.youtube_fragment);
 
         return view;
     }
@@ -65,6 +69,7 @@ public class LaxmiPuranaVideoFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         Logger.logD(Config.TAG, CLASS_NAME, " >> setUserVisibleHint >> Flag: " + isVisibleToUser);
 
+        // Load Video when the page is visible
         if (isVisibleToUser && isResumed()) {
             loadYoutubeLink();
         }
@@ -77,8 +82,9 @@ public class LaxmiPuranaVideoFragment extends Fragment {
                                                 YouTubePlayer youTubePlayer, boolean b) {
                 if (!b) {
                     yPlayer = youTubePlayer;
+                    // TODO: To implement fullscreen mode
 //                    yPlayer.setFullscreen(true);
-                    yPlayer.loadVideo("Pzz3vNNFM5I");
+                    yPlayer.loadVideo(PURANA_VIDEO_LINK);
                     yPlayer.play();
                 }
             }
@@ -125,6 +131,7 @@ public class LaxmiPuranaVideoFragment extends Fragment {
         super.onDestroyView();
         Logger.logD(Config.TAG, CLASS_NAME, " >> onDestroyView");
 
+        // To avoid duplicate Id issue, when we navigate to this fragment again.
         if (null != youTubeFragment) {
             getChildFragmentManager().beginTransaction().remove(youTubeFragment).commitAllowingStateLoss();
         }
