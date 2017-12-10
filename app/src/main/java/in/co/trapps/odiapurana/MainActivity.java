@@ -13,7 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import in.co.trapps.odiapurana.fragments.LaxmiPuranaFragment;
 import in.co.trapps.odiapurana.fragments.LaxmiPuranaVideoFragment;
-import in.co.trapps.odiapurana.fragments.MusicFragment;
+import in.co.trapps.odiapurana.fragments.MusicServiceFragment;
 import in.co.trapps.odiapurana.logger.LoggerEnable;
 
 public class MainActivity extends AppCompatActivity {
@@ -60,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment = null;
             switch (position) {
                 case 0:
-                    fragment = new MusicFragment();
+//                    fragment = new MusicFragment();
+                    fragment = new MusicServiceFragment();
                     break;
                 case 1:
                     fragment = new LaxmiPuranaFragment();
