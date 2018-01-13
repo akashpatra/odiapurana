@@ -11,9 +11,11 @@ import android.support.v7.widget.Toolbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import in.co.trapps.odiapurana.constants.Config;
 import in.co.trapps.odiapurana.fragments.LaxmiPuranaFragment;
 import in.co.trapps.odiapurana.fragments.LaxmiPuranaVideoFragment;
 import in.co.trapps.odiapurana.fragments.MusicServiceFragment;
+import in.co.trapps.odiapurana.logger.Logger;
 import in.co.trapps.odiapurana.logger.LoggerEnable;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Logger.logD(Config.TAG, CLASS_NAME, " >> onCreate");
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
