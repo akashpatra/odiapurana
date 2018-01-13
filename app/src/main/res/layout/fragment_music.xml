@@ -5,12 +5,6 @@
     android:layout_height="match_parent"
     tools:context="in.co.trapps.odiapurana.fragments.MusicFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Music Fragment"/>
-
     <Button
         android:id="@+id/audio_button"
         android:layout_width="wrap_content"
@@ -21,11 +15,22 @@
         android:layout_marginTop="34dp"
         android:text="Launch Music"/>
 
+    <TextView
+        android:id="@+id/tv_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/audio_button"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="40dp"
+        android:text="Total NA"/>
+
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/audio_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"/>
+        android:layout_marginTop="70dp"
+        android:progressDrawable="@drawable/custom_seek_bar"/>
 </RelativeLayout>

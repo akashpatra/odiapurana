@@ -39,6 +39,7 @@ public class MusicService extends Service implements MediaPlayer.OnBufferingUpda
     // Regarding States
     private State mState = State.Initial;
     private boolean isViewVisible = true;
+    private int bufferingPosition;
     // Regarding Notification
     private NotificationManager mNotificationManager;
     private Notification mNotification = null;
@@ -118,8 +119,35 @@ public class MusicService extends Service implements MediaPlayer.OnBufferingUpda
     }
 
     @Override
-    public void onBufferingUpdate(MediaPlayer mediaPlayer, int i) {
+    public void onBufferingUpdate(MediaPlayer mediaPlayer, int bufferPercent) {
+        Logger.logD(Config.TAG, CLASS_NAME, " >> BufferPercent: " + bufferPercent);
+        this.bufferingPosition = bufferPercent;
+    }
 
+    public int getBufferingPosition() {
+        return bufferingPosition;
+    }
+
+    public int getCurrentDuration() {
+        if (null == mMediaPlayer) {
+            Logger.logD(Config.TAG, CLASS_NAME, " >> Media Player is not initialized yet");
+            return -1;
+        } else {
+            return mMediaPlayer.getCurrentPosition();
+        }
+    }
+
+    public int getTotalDuration() {
+        if (null == mMediaPlayer) {
+            Logger.logD(Config.TAG, CLASS_NAME, " >> Media Player is not initialized yet");
+            return -1;
+        } else {
+            return mMediaPlayer.getDuration();
+        }
+    }
+
+    public void seekTo(int position) {
+        mMediaPlayer.seekTo(position);
     }
 
     @Override
@@ -134,25 +162,25 @@ public class MusicService extends Service implements MediaPlayer.OnBufferingUpda
     public void onDestroy() {
         Logger.logD(Config.TAG, CLASS_NAME, " >> onDestroy");
 
-        if (mMediaPlayer != null) {
+        if (null != mMediaPlayer) {
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
         mState = State.Initial;
     }
 
-    public void updateNotification(boolean isViewVisible) {
-        this.isViewVisible = isViewVisible;
-
-        if (isViewVisible) {
-            stopForeground(true);
-        } else {
-            if (State.Playing.equals(mState)) {
-                showNotification(true);
-            } else if (State.Paused.equals(mState)) {
-                showNotification(false);
-            }
+    public boolean isPlayerReady() {
+        if (!mState.equals(State.Preparing) && !mState.equals(State.Initial)) {
+            return true;
         }
+        return false;
+    }
+
+    public boolean isPlaying() {
+        if (mState.equals(State.Playing)) {
+            return true;
+        }
+        return false;
     }
 
     public void startMusic() {
@@ -180,18 +208,18 @@ public class MusicService extends Service implements MediaPlayer.OnBufferingUpda
         }
     }
 
-    public boolean isPlayerReady() {
-        if (!mState.equals(State.Preparing) && !mState.equals(State.Initial)) {
-            return true;
-        }
-        return false;
-    }
+    public void updateNotification(boolean isViewVisible) {
+        this.isViewVisible = isViewVisible;
 
-    public boolean isPlaying() {
-        if (mState.equals(State.Playing)) {
-            return true;
+        if (isViewVisible) {
+            stopForeground(true);
+        } else {
+            if (State.Playing.equals(mState)) {
+                showNotification(true);
+            } else if (State.Paused.equals(mState)) {
+                showNotification(false);
+            }
         }
-        return false;
     }
 
     private void showNotification(boolean isPlaying) {

@@ -1,8 +1,6 @@
 package in.co.trapps.odiapurana.fragments;
 
-import android.app.ActivityManager;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -14,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +22,7 @@ import in.co.trapps.odiapurana.constants.Config;
 import in.co.trapps.odiapurana.logger.Logger;
 import in.co.trapps.odiapurana.logger.LoggerEnable;
 import in.co.trapps.odiapurana.service.MusicService;
+import in.co.trapps.odiapurana.utils.CommonUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,32 +39,39 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
 
     private final String MUSIC_URL = "http://media.djmazadownload.com/music/indian_movies/Tumhari" +
             "%20Sulu%20%282017%29/01%20-%20Tumhari%20Sulu%20-%20Ban%20Ja%20Rani%20%5BDJMaza.Info%5D.mp3";
-
-    // Set states
-//    private int mediaFileLengthInMilliseconds;
-    private final Handler handler = new Handler();
+    private final Handler mHandler = new Handler();
     @BindView(R.id.audio_button)
     public Button audioButton;
     @BindView(R.id.seekBar)
     public SeekBar musicSeekBar;
+    @BindView(R.id.tv_duration)
+    public TextView tvDuration;
     public ProgressDialog progressDialog;
-    private MediaPlayer mediaPlayer;
-    Runnable updateProgressNotification = new Runnable() {
+    // Set states
+    private MusicService mInstance;
+    Runnable seekBarRunnable = new Runnable() {
         @Override
         public void run() {
-            int progress = getProgressPercentage(mediaPlayer.getCurrentPosition(), mediaPlayer.getDuration());
-            musicSeekBar.setProgress(progress);
+            Logger.logD(Config.TAG, CLASS_NAME, " >> run");
 
-            handler.postDelayed(this, 100);
+            if (mInstance == null) {
+                mInstance = MusicService.getInstance();
+            }
+
+            //
+            long currentDuration = mInstance.getCurrentDuration();
+            long totalDuration = mInstance.getTotalDuration();
+            String duration = CommonUtils.milliSecondsToTimer(currentDuration) + " / "
+                    + CommonUtils.milliSecondsToTimer(totalDuration);
+            tvDuration.setText(duration);
+
+            int progress = CommonUtils.getProgressPercentage(currentDuration, totalDuration);
+            musicSeekBar.setProgress(progress);
+            musicSeekBar.setSecondaryProgress(mInstance.getBufferingPosition());
+
+            mHandler.postDelayed(this, 100);
         }
     };
-    private boolean isPlaying;
-    private boolean initialStage = true;
-    private MusicService mInstance;
-
-    public MusicServiceFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,26 +80,13 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
 
         progressDialog = new ProgressDialog(getActivity());
 
-        // Will work, if coming from Notification
-        if (isServiceRunning(MusicService.class)) {
-            Logger.logD(Config.TAG, CLASS_NAME, " >> onCreate >> Service is running.");
-            mInstance = MusicService.getInstance();
-        }
-
         MusicService.setSong(MUSIC_URL, "Odiaaa");
         Intent musicIntent = new Intent(getActivity(), MusicService.class);
         musicIntent.setAction(MusicService.ACTION_PLAY);
         getActivity().startService(musicIntent);
-    }
 
-    private boolean isServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
+        // Start task to update SeekBar Progress
+        mHandler.postDelayed(seekBarRunnable, 100);
     }
 
     @Override
@@ -114,15 +108,12 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
 
         // Initialize Views
         musicSeekBar.setMax(99);
+        musicSeekBar.setOnSeekBarChangeListener(this);
     }
 
     @OnClick(R.id.audio_button)
     public void audioButtonClick(View view) {
         Logger.logD(Config.TAG, CLASS_NAME, " >> audioButtonClick");
-
-        if (mInstance == null) {
-            mInstance = MusicService.getInstance();
-        }
 
         if (null != mInstance && mInstance.isPlayerReady()) {
             if (mInstance.isPlaying()) {
@@ -142,22 +133,19 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
         Logger.logD(Config.TAG, CLASS_NAME, " >> setDefaultViews");
 
         if (null != mInstance) {
-            // Change the views of Buttons
+            // Change the views of Buttons & SeekBar
             if (mInstance.isPlaying()) {
                 // Pause Music
                 audioButton.setText("Pause Music");
+                // Start task to update SeekBar Progress
+                mHandler.postDelayed(seekBarRunnable, 100);
             } else {
                 // Play Music
                 audioButton.setText("Play Music");
+                // Stop task to update SeekBar Progress
+                mHandler.removeCallbacks(seekBarRunnable);
             }
-
-            // Change the views of SeekBar
-
         }
-    }
-
-    private void primarySeekBarProgressUpdate() {
-
     }
 
     @Override
@@ -193,40 +181,6 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
         }
     }
 
-    /**
-     * Function to get Progress percentage
-     *
-     * @param currentDuration
-     * @param totalDuration
-     */
-    public int getProgressPercentage(long currentDuration, long totalDuration) {
-        Double percentage = (double) 0;
-
-        long currentSeconds = (int) (currentDuration / 1000);
-        long totalSeconds = (int) (totalDuration / 1000);
-
-        // calculating percentage
-        percentage = (((double) currentSeconds) / totalSeconds) * 100;
-
-        // return percentage
-        return percentage.intValue();
-    }
-
-    /**
-     * Function to change progress to timer
-     *
-     * @param progress      -
-     * @param totalDuration returns current duration in milliseconds
-     */
-    public int progressToTimer(int progress, int totalDuration) {
-        int currentDuration = 0;
-        totalDuration = (int) (totalDuration / 1000);
-        currentDuration = (int) ((((double) progress) / 100) * totalDuration);
-
-        // return current duration in milliseconds
-        return currentDuration * 1000;
-    }
-
     @Override
     public void onStop() {
         super.onStop();
@@ -237,12 +191,19 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
     public void onDestroyView() {
         super.onDestroyView();
         Logger.logD(Config.TAG, CLASS_NAME, " >> onDestroyView");
+
+        if (null != mInstance && mInstance.isPlaying()) {
+            mInstance.pauseMusic();
+            mInstance.updateNotification(true);
+            setDefaultViews();
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         Logger.logD(Config.TAG, CLASS_NAME, " >> onDestroy");
+
         if (null != mInstance) {
             Intent musicIntent = new Intent(getActivity(), MusicService.class);
             musicIntent.setAction(MusicService.ACTION_STOP);
@@ -257,11 +218,19 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-
+        // Pause Music
+        mInstance.pauseMusic();
+        setDefaultViews();
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-
+        // Calculate the progress
+        int position = CommonUtils.progressToTimer(seekBar.getProgress(), mInstance.getTotalDuration());
+        // Set the position in media player
+        mInstance.seekTo(position);
+        // Play Music
+        mInstance.startMusic();
+        setDefaultViews();
     }
 }
