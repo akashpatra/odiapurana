@@ -114,8 +114,6 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
 
         // Initialize Views
         musicSeekBar.setMax(99);
-
-        setDefaultViews();
     }
 
     @OnClick(R.id.audio_button)
@@ -178,7 +176,11 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
         super.onResume();
         Logger.logD(Config.TAG, CLASS_NAME, " >> onResume");
 
+        setDefaultViews();
 
+        if (null != mInstance && mInstance.isPlayerReady()) {
+            mInstance.updateNotification(true);
+        }
     }
 
     @Override
@@ -186,6 +188,9 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
         super.onPause();
         Logger.logD(Config.TAG, CLASS_NAME, " >> onPause");
 
+        if (null != mInstance && mInstance.isPlayerReady()) {
+            mInstance.updateNotification(false);
+        }
     }
 
     /**

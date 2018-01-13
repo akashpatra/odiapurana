@@ -36,7 +36,9 @@ public class MusicService extends Service implements MediaPlayer.OnBufferingUpda
     private final LoggerEnable CLASS_NAME = LoggerEnable.MusicService;
     private final int NOTIFICATION_ID = 1;
     private MediaPlayer mMediaPlayer = null;
+    // Regarding States
     private State mState = State.Initial;
+    private boolean isViewVisible = true;
     // Regarding Notification
     private NotificationManager mNotificationManager;
     private Notification mNotification = null;
@@ -69,27 +71,29 @@ public class MusicService extends Service implements MediaPlayer.OnBufferingUpda
     public int onStartCommand(Intent intent, int flags, int startId) {
         Logger.logD(Config.TAG, CLASS_NAME, " >> onStartCommand");
 
-        if (ACTION_PLAY.equalsIgnoreCase(intent.getAction())) {
-            if (null == mMediaPlayer) {
-                Logger.logD(Config.TAG, CLASS_NAME, " >> ACTION_PLAY");
+        if (null != intent) {
+            if (ACTION_PLAY.equalsIgnoreCase(intent.getAction())) {
+                if (null == mMediaPlayer) {
+                    Logger.logD(Config.TAG, CLASS_NAME, " >> ACTION_PLAY");
 
-                mMediaPlayer = new MediaPlayer(); // initialize it here
-                mMediaPlayer.setOnPreparedListener(this);
+                    mMediaPlayer = new MediaPlayer(); // initialize it here
+                    mMediaPlayer.setOnPreparedListener(this);
 //            mMediaPlayer.setOnErrorListener(this);
-                mMediaPlayer.setOnBufferingUpdateListener(this);
-                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                initMediaPlayer();
-            } else {
-                startMusic();
-            }
-        } else if (ACTION_PAUSE.equalsIgnoreCase(intent.getAction())) {
-            Logger.logD(Config.TAG, CLASS_NAME, " >> ACTION_PAUSE");
-            pauseMusic();
-        } else if (ACTION_STOP.equalsIgnoreCase(intent.getAction())) {
-            Logger.logD(Config.TAG, CLASS_NAME, " >> ACTION_STOP");
+                    mMediaPlayer.setOnBufferingUpdateListener(this);
+                    mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    initMediaPlayer();
+                } else {
+                    startMusic();
+                }
+            } else if (ACTION_PAUSE.equalsIgnoreCase(intent.getAction())) {
+                Logger.logD(Config.TAG, CLASS_NAME, " >> ACTION_PAUSE");
+                pauseMusic();
+            } else if (ACTION_STOP.equalsIgnoreCase(intent.getAction())) {
+                Logger.logD(Config.TAG, CLASS_NAME, " >> ACTION_STOP");
 
-            stopForeground(true);
-            stopSelf();
+                stopForeground(true);
+                stopSelf();
+            }
         }
         return START_STICKY;
     }
@@ -137,6 +141,20 @@ public class MusicService extends Service implements MediaPlayer.OnBufferingUpda
         mState = State.Initial;
     }
 
+    public void updateNotification(boolean isViewVisible) {
+        this.isViewVisible = isViewVisible;
+
+        if (isViewVisible) {
+            stopForeground(true);
+        } else {
+            if (State.Playing.equals(mState)) {
+                showNotification(true);
+            } else if (State.Paused.equals(mState)) {
+                showNotification(false);
+            }
+        }
+    }
+
     public void startMusic() {
         Logger.logD(Config.TAG, CLASS_NAME, " >> startMusic");
 
@@ -146,7 +164,7 @@ public class MusicService extends Service implements MediaPlayer.OnBufferingUpda
             mMediaPlayer.start();
             mState = State.Playing;
             // Update Notification
-            updateNotification(true);
+            updateNotification(isViewVisible);
         }
     }
 
@@ -158,7 +176,7 @@ public class MusicService extends Service implements MediaPlayer.OnBufferingUpda
             mMediaPlayer.pause();
             mState = State.Paused;
             // Update Notification
-            updateNotification(false);
+            updateNotification(isViewVisible);
         }
     }
 
@@ -176,15 +194,10 @@ public class MusicService extends Service implements MediaPlayer.OnBufferingUpda
         return false;
     }
 
-    private void updateNotification(boolean isPlaying) {
-        setUpAsForeground(isPlaying);
-    }
-
-    private void setUpAsForeground(boolean isPlaying) {
+    private void showNotification(boolean isPlaying) {
         Intent notificationIntent = new Intent(this, MainActivity.class);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0,
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pi = PendingIntent.getActivity(this, 0,
                 notificationIntent, 0);
 
         Bitmap icon = BitmapFactory.decodeResource(getResources(),

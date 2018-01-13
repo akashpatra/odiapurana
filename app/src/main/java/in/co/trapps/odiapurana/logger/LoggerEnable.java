@@ -10,7 +10,7 @@ public enum LoggerEnable implements ILoggerActivator {
     MainAct {
         @Override
         public boolean isEnabled() {
-            return false;
+            return true;
         }
     },
     MusicFragment {
