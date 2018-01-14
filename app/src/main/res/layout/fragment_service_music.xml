@@ -11,7 +11,7 @@
         android:text="Music Fragment"/>
 
     <Button
-        android:id="@+id/audio_button"
+        android:id="@+id/btn_play_pause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -24,7 +24,7 @@
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/audio_button"
+        android:layout_below="@+id/btn_play_pause"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp"/>
 </RelativeLayout>

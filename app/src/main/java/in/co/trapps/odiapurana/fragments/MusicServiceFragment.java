@@ -34,13 +34,14 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
     private final LoggerEnable CLASS_NAME = LoggerEnable.MusicServiceFragment;
 
     // Music Url
-//    private final String MUSIC_URL = "http://www.kunuweb.in/siteuploads/files/sfd19/9263" +
-//            "/Laxmi%20Purana%20-%20Namita%20Agrawal%20-%20Geeta%20Dash%20-%20Full%20Song(kunuweb.In).mp3";
+    private final String MUSIC_URL = "http://www.kunuweb.in/siteuploads/files/sfd19/9263" +
+            "/Laxmi%20Purana%20-%20Namita%20Agrawal%20-%20Geeta%20Dash%20-%20Full%20Song(kunuweb.In).mp3";
 
-    private final String MUSIC_URL = "http://media.djmazadownload.com/music/indian_movies/Tumhari" +
-            "%20Sulu%20%282017%29/01%20-%20Tumhari%20Sulu%20-%20Ban%20Ja%20Rani%20%5BDJMaza.Info%5D.mp3";
+//    private final String MUSIC_URL = "http://media.djmazadownload.com/music/indian_movies/Tumhari" +
+//            "%20Sulu%20%282017%29/01%20-%20Tumhari%20Sulu%20-%20Ban%20Ja%20Rani%20%5BDJMaza.Info%5D.mp3";
+
     private final Handler mHandler = new Handler();
-    @BindView(R.id.audio_button)
+    @BindView(R.id.btn_play_pause)
     public Button audioButton;
     @BindView(R.id.seekBar)
     public SeekBar musicSeekBar;
@@ -80,7 +81,7 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
 
         progressDialog = new ProgressDialog(getActivity());
 
-        MusicService.setSong(MUSIC_URL, "Odiaaa");
+        MusicService.setSong(MUSIC_URL, "Odia Laxmi Purana");
         Intent musicIntent = new Intent(getActivity(), MusicService.class);
         musicIntent.setAction(MusicService.ACTION_PLAY);
         getActivity().startService(musicIntent);
@@ -111,7 +112,7 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
         musicSeekBar.setOnSeekBarChangeListener(this);
     }
 
-    @OnClick(R.id.audio_button)
+    @OnClick(R.id.btn_play_pause)
     public void audioButtonClick(View view) {
         Logger.logD(Config.TAG, CLASS_NAME, " >> audioButtonClick");
 
@@ -136,12 +137,14 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
             // Change the views of Buttons & SeekBar
             if (mInstance.isPlaying()) {
                 // Pause Music
-                audioButton.setText("Pause Music");
+//                audioButton.setText("Pause Music");
+                audioButton.setBackgroundResource(R.drawable.ic_pause_circle);
                 // Start task to update SeekBar Progress
-                mHandler.postDelayed(seekBarRunnable, 100);
+                mHandler.postDelayed(seekBarRunnable, 0);
             } else {
                 // Play Music
-                audioButton.setText("Play Music");
+//                audioButton.setText("Play Music");
+                audioButton.setBackgroundResource(R.drawable.ic_play_circle);
                 // Stop task to update SeekBar Progress
                 mHandler.removeCallbacks(seekBarRunnable);
             }

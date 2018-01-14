@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@android:id/background">// background of seekbar
-        <shape>
-            <corners android:radius="20dip"/>
-            <solid android:color="#6777E1"/>
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/seek_bar_radius"/>
+            <solid android:color="@color/amber_100"/>
         </shape>
     </item>
     <item android:id="@android:id/secondaryProgress">//secondaryProgress color
         <clip>
-            <shape>
-                <corners android:radius="20dip"/>
-                <solid android:color="#F7CCBD"/>
+            <shape android:shape="rectangle">
+                <corners android:radius="@dimen/seek_bar_radius"/>
+                <solid android:color="@color/amber_200"/>
             </shape>
         </clip>
     </item>
     <item android:id="@android:id/progress">// progress color
         <clip>
-            <shape>
-                <corners android:radius="20dip"/>
-                <solid android:color="#87DED5"/>
+            <shape android:shape="rectangle">
+                <corners android:radius="@dimen/seek_bar_radius"/>
+                <solid android:color="@color/amber_500"/>
             </shape>
         </clip>
     </item>
