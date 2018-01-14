@@ -39,7 +39,7 @@ public class MusicFragment extends Fragment implements View.OnTouchListener, Med
     // Set states
 //    private int mediaFileLengthInMilliseconds;
     private final Handler handler = new Handler();
-    @BindView(R.id.audio_button)
+    @BindView(R.id.btn_play_pause)
     public Button audioButton;
     @BindView(R.id.seekBar)
     public SeekBar musicSeekBar;
@@ -91,7 +91,7 @@ public class MusicFragment extends Fragment implements View.OnTouchListener, Med
         musicSeekBar.setOnTouchListener(this);
     }
 
-    @OnClick(R.id.audio_button)
+    @OnClick(R.id.btn_play_pause)
     public void audioButtonClick(View view) {
         if (!isPlaying) {
             // Start Playing

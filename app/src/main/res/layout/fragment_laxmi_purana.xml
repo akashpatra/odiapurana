@@ -1,13 +1,25 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="in.co.trapps.odiapurana.fragments.LaxmiPuranaFragment">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="in.co.trapps.odiapurana.fragments.LaxmiPuranaFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
+        android:id="@+id/sv_lyrics"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Laxmi Purana Fragment"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/lyrics_margin"
+        android:background="@drawable/custom_frame"
+        android:padding="@dimen/lyrics_padding">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/odia_purana_content"
+            android:textColor="@color/white"
+            android:textSize="@dimen/lyrics_text_size"/>
+    </ScrollView>
 
 </FrameLayout>

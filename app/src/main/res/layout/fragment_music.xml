@@ -5,32 +5,65 @@
     android:layout_height="match_parent"
     tools:context="in.co.trapps.odiapurana.fragments.MusicFragment">
 
-    <Button
-        android:id="@+id/audio_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="34dp"
-        android:text="Launch Music"/>
-
-    <TextView
-        android:id="@+id/tv_duration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/audio_button"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="40dp"
-        android:text="Total NA"/>
-
-    <SeekBar
-        android:id="@+id/seekBar"
+    <!--<ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/audio_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:progressDrawable="@drawable/custom_seek_bar"/>
+        android:layout_height="match_parent"
+        android:alpha="0.5"
+        android:scaleType="fitXY"
+        android:src="@drawable/img_1466_edited"/>-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/main_padding">
+
+        <TextView
+            android:id="@+id/tv_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/duration_margin_top"
+            android:textColor="@color/black"
+            android:textSize="@dimen/duration_text_size"/>
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_duration"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/seek_bar_margin_top"
+            android:progressDrawable="@drawable/custom_seek_bar"
+            android:splitTrack="false"
+            android:thumb="@drawable/custom_thumb"
+            android:thumbOffset="@dimen/seek_bar_thumb_offset"/>
+
+        <Button
+            android:id="@+id/btn_play_pause"
+            android:layout_width="@dimen/play_btn_size"
+            android:layout_height="@dimen/play_btn_size"
+            android:layout_below="@id/seekBar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/play_btn_margin_top"
+            android:background="@drawable/ic_play_circle"/>
+
+        <ScrollView
+            android:id="@+id/sv_lyrics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_play_pause"
+            android:layout_margin="@dimen/lyrics_margin"
+            android:background="@drawable/custom_frame"
+            android:padding="@dimen/lyrics_padding">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/odia_purana_content"
+                android:textColor="@color/white"
+                android:textSize="@dimen/lyrics_text_size"/>
+        </ScrollView>
+    </RelativeLayout>
+
 </RelativeLayout>

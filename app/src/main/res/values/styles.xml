@@ -14,4 +14,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--<style name="CustomSeekBar" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressBackgroundTint"></item>
+    </style>-->
 </resources>
