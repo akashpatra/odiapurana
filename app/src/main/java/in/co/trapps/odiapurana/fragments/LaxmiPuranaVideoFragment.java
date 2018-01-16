@@ -69,8 +69,22 @@ public class LaxmiPuranaVideoFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         Logger.logD(Config.TAG, CLASS_NAME, " >> setUserVisibleHint >> Flag: " + isVisibleToUser);
 
+        // Check and Load
+        checkAndLoad();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Logger.logD(Config.TAG, CLASS_NAME, " >> onResume");
+
+        // Check and Load
+        checkAndLoad();
+    }
+
+    private void checkAndLoad() {
         // Load Video when the page is visible
-        if (isVisibleToUser && isResumed()) {
+        if (getUserVisibleHint() && isResumed()) {
             loadYoutubeLink();
         }
     }
@@ -106,12 +120,6 @@ public class LaxmiPuranaVideoFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Logger.logD(Config.TAG, CLASS_NAME, " >> onStart");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Logger.logD(Config.TAG, CLASS_NAME, " >> onResume");
     }
 
     @Override
