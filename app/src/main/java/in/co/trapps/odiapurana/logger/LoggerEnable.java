@@ -28,22 +28,16 @@ public enum LoggerEnable implements ILoggerActivator {
     MusicService {
         @Override
         public boolean isEnabled() {
-            return true;
+            return false;
         }
     },
     LaxmiPuranaFragment {
         @Override
         public boolean isEnabled() {
-            return false;
+            return true;
         }
     },
     LaxmiPuranaVideoFragment {
-        @Override
-        public boolean isEnabled() {
-            return false;
-        }
-    },
-    BeatPlanFragment {
         @Override
         public boolean isEnabled() {
             return true;
