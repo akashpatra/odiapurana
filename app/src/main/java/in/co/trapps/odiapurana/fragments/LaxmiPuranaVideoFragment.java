@@ -98,7 +98,9 @@ public class LaxmiPuranaVideoFragment extends Fragment {
                     yPlayer = youTubePlayer;
                     // TODO: To implement fullscreen mode
 //                    yPlayer.setFullscreen(true);
-                    yPlayer.loadVideo(PURANA_VIDEO_LINK);
+//                    yPlayer.loadVideo(PURANA_VIDEO_LINK);
+                    // Doesn't auto play the video.
+                    yPlayer.cueVideo(PURANA_VIDEO_LINK);
                     yPlayer.play();
                 }
             }
