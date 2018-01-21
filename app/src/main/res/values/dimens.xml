@@ -16,7 +16,7 @@
     <dimen name="seek_bar_thumb_offset">5dp</dimen>
     <dimen name="play_btn_size">40dp</dimen>
     <dimen name="play_btn_margin_top">12dp</dimen>
-    <dimen name="lyrics_margin">25dp</dimen>
+    <dimen name="lyrics_margin">15dp</dimen>
     <dimen name="lyrics_padding">10dp</dimen>
-    <dimen name="lyrics_text_size">15sp</dimen>
+    <dimen name="lyrics_text_size">17sp</dimen>
 </resources>
