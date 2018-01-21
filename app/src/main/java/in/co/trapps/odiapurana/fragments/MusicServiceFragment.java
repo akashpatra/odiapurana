@@ -53,7 +53,7 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
     Runnable seekBarRunnable = new Runnable() {
         @Override
         public void run() {
-            Logger.logD(Config.TAG, CLASS_NAME, " >> run");
+//            Logger.logD(Config.TAG, CLASS_NAME, " >> run");
 
             if (mInstance == null) {
                 mInstance = MusicService.getInstance();
@@ -85,9 +85,6 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
         Intent musicIntent = new Intent(getActivity(), MusicService.class);
         musicIntent.setAction(MusicService.ACTION_PLAY);
         getActivity().startService(musicIntent);
-
-        // Start task to update SeekBar Progress
-        mHandler.postDelayed(seekBarRunnable, 100);
     }
 
     @Override
@@ -95,10 +92,12 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
                              Bundle savedInstanceState) {
         Logger.logD(Config.TAG, CLASS_NAME, " >> onCreateView");
 
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_music, container, false);
         ButterKnife.bind(this, view);
 
-        // Inflate the layout for this fragment
+        // Start task to update SeekBar Progress
+        mHandler.postDelayed(seekBarRunnable, 100);
         return view;
     }
 
