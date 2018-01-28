@@ -147,7 +147,9 @@ public class MusicService extends Service implements MediaPlayer.OnBufferingUpda
     }
 
     public void seekTo(int position) {
-        mMediaPlayer.seekTo(position);
+        if (null != mMediaPlayer) {
+            mMediaPlayer.seekTo(position);
+        }
     }
 
     @Override
