@@ -33,4 +33,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile('com.jakewharton:butterknife:8.8.1')
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'com.google.android.gms:play-services-ads:11.8.0'
 }

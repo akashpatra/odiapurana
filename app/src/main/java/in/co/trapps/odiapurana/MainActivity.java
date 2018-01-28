@@ -10,7 +10,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,8 +38,9 @@ public class MainActivity extends AppCompatActivity {
     public TabLayout tabLayoutLaxmiPurana;
     @BindView(R.id.vp_laxmi_purana)
     public ViewPager vpLaxmiPurana;
+    @BindView(R.id.adView_main_banner)
+    public AdView adView;
     private long mLastBackPress;
-    private Toast mBackPressToast;
     private Snackbar mSnackBar;
 
     @Override
@@ -45,7 +49,12 @@ public class MainActivity extends AppCompatActivity {
         Logger.logD(Config.TAG, CLASS_NAME, " >> onCreate");
 
         setContentView(R.layout.activity_main);
+
+        // Bind View
         ButterKnife.bind(this);
+
+        // Initialize the AdMob
+        MobileAds.initialize(this, getString(R.string.admob_app_id));
 
         // Initialize Views
         initializeViews();
@@ -57,6 +66,13 @@ public class MainActivity extends AppCompatActivity {
 
         vpLaxmiPurana.setAdapter(new LaxmiPuranaAdapter(getSupportFragmentManager()));
         tabLayoutLaxmiPurana.setupWithViewPager(vpLaxmiPurana);
+
+        AdRequest adRequest = new AdRequest.Builder()
+//                .addTestDevice("D1C88D04D3D8E0ADDA872E4EB3602892") //samsung tab S
+//                .addTestDevice("7D43CE2D5C109527E736A2407009450B")//oneplus
+                .build();
+
+        adView.loadAd(adRequest);
     }
 
     @Override
