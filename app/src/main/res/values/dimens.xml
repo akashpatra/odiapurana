@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Main Activity -->
+    <dimen name="view_pager_margin_bottom">100dp</dimen>
+
     <!-- Custom SeekBar -->
     <dimen name="seek_bar_radius">12dp</dimen>
     <dimen name="thumb_size">23dp</dimen>

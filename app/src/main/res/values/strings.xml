@@ -6,6 +6,11 @@
 
     <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
 
+    <!-- AdMob -->
+    <string name="admob_app_id">ca-app-pub-9463226049815017~2139159946</string>
+    <string name="main_banner_id">ca-app-pub-9463226049815017/1313163430</string>
+    <string name="test_banner_id">ca-app-pub-3940256099942544/6300978111</string>
+
     <string name="odia_purana_content">
         ନମସ୍ତେ କମଳା ମାଗୋ ସାଗର ଦୁଲ୍ଲଣୀ ।\n
         ନମସ୍ତେ ନମସ୍ତେ ଲକ୍ଷ୍ମୀ ବିଷ୍ଣୁଙ୍କ ଘରଣି ।୧।\n\n
