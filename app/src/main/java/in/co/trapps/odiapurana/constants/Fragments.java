@@ -6,9 +6,4 @@ package in.co.trapps.odiapurana.constants;
  * @author Akash Patra
  */
 public enum Fragments {
-    LOGIN_FRAGMENT,
-    OTP_FRAGMENT,
-    BEAT_PLAN_FRAGMENT,
-    SELF_AUDIT_LIST_FRAGMENT,
-    SELF_AUDIT_DETAIL_FRAGMENT
 }

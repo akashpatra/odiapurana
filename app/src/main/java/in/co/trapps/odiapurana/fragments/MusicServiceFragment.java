@@ -2,6 +2,7 @@ package in.co.trapps.odiapurana.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -47,6 +48,8 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
     public SeekBar musicSeekBar;
     @BindView(R.id.tv_duration)
     public TextView tvDuration;
+    @BindView(R.id.tv_lyrics)
+    public TextView tvLyrics;
     public ProgressDialog progressDialog;
     // Set states
     private MusicService mInstance;
@@ -107,8 +110,13 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
         Logger.logD(Config.TAG, CLASS_NAME, " >> onViewCreated");
 
         // Initialize Views
+        // SeekBar Initialization
         musicSeekBar.setMax(99);
         musicSeekBar.setOnSeekBarChangeListener(this);
+
+        // Custom Font for Lyrics
+        Typeface droidFont = Typeface.createFromAsset(getActivity().getAssets(), Config.FONT_REGIONAL);
+        tvLyrics.setTypeface(droidFont);
     }
 
     @OnClick(R.id.btn_play_pause)
