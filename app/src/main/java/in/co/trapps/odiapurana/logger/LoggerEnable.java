@@ -16,13 +16,13 @@ public enum LoggerEnable implements ILoggerActivator {
     MusicFragment {
         @Override
         public boolean isEnabled() {
-            return true;
+            return false;
         }
     },
     MusicServiceFragment {
         @Override
         public boolean isEnabled() {
-            return true;
+            return false;
         }
     },
     MusicService {
@@ -34,10 +34,16 @@ public enum LoggerEnable implements ILoggerActivator {
     LaxmiPuranaFragment {
         @Override
         public boolean isEnabled() {
-            return true;
+            return false;
         }
     },
     LaxmiPuranaVideoFragment {
+        @Override
+        public boolean isEnabled() {
+            return false;
+        }
+    },
+    MySharedPrefs {
         @Override
         public boolean isEnabled() {
             return true;

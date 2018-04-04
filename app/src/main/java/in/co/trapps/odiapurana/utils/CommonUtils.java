@@ -6,6 +6,16 @@ package in.co.trapps.odiapurana.utils;
 public class CommonUtils {
 
     /**
+     * Checks strings is null/empty/length==0
+     *
+     * @param s
+     * @return
+     */
+    public static boolean isStringEmpty(String s) {
+        return (s == null) || (s.trim().equals(""));
+    }
+
+    /**
      * Function to get Progress percentage
      *
      * @param currentDuration
