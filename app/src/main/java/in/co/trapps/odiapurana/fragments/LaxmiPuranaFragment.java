@@ -44,7 +44,6 @@ public class LaxmiPuranaFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_laxmi_purana, container, false);
-        ButterKnife.bind(this, view);
 
         return view;
     }
@@ -53,6 +52,16 @@ public class LaxmiPuranaFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Logger.logD(Config.TAG, CLASS_NAME, " >> onViewCreated");
+
+        ButterKnife.bind(this, view);
+
+        // Get the data from String Array and set to View
+        String[] puranaArr = getResources().getStringArray(R.array.odia_purana_arr);
+        StringBuilder purana = new StringBuilder();
+        for (String temp : puranaArr) {
+            purana.append(temp);
+        }
+        tvLyrics.setText(purana);
 
         // Custom Font for Lyrics
         Typeface droidFont = Typeface.createFromAsset(getActivity().getAssets(), Config.FONT_REGIONAL);

@@ -94,13 +94,8 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Logger.logD(Config.TAG, CLASS_NAME, " >> onCreateView");
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_music, container, false);
-        ButterKnife.bind(this, view);
-
-        // Start task to update SeekBar Progress
-        mHandler.postDelayed(seekBarRunnable, 100);
         return view;
     }
 
@@ -109,10 +104,23 @@ public class MusicServiceFragment extends Fragment implements MediaPlayer.OnBuff
         super.onViewCreated(view, savedInstanceState);
         Logger.logD(Config.TAG, CLASS_NAME, " >> onViewCreated");
 
+        ButterKnife.bind(this, view);
+
+        // Start task to update SeekBar Progress
+        mHandler.postDelayed(seekBarRunnable, 100);
+
         // Initialize Views
         // SeekBar Initialization
         musicSeekBar.setMax(99);
         musicSeekBar.setOnSeekBarChangeListener(this);
+
+        // Get the data from String Array and set to View
+        String[] puranaArr = getResources().getStringArray(R.array.odia_purana_arr);
+        StringBuilder purana = new StringBuilder();
+        for (String temp : puranaArr) {
+            purana.append(temp);
+        }
+        tvLyrics.setText(purana);
 
         // Custom Font for Lyrics
         Typeface droidFont = Typeface.createFromAsset(getActivity().getAssets(), Config.FONT_REGIONAL);
